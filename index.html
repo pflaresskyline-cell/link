@@ -4,16 +4,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
     <meta name="theme-color" content="#B76E79">
-    <title>Foto Evento</title>
-    <meta name="description" content="Livro de Casamento Digital Animado">
-    <meta property="og:title" content="Foto Evento">
-    <meta property="og:description" content="Livro de Casamento Digital Animado">
+    <title>Paulo Lares</title>
+    <meta name="description" content="Paulo Lares">
+    <meta property="og:title" content="Paulo Lares">
+    <meta property="og:description" content="Paulo Lares">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="https://i.postimg.cc/NGy27p9M/Whats-App-Image-2026-09-02-at-09-28-55-removebg-preview.png">
+    <meta property="og:image" content="https://i.postimg.cc/906XCfcK/logo-nova-(1).png">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Foto Evento">
-    <meta name="twitter:description" content="Livro de Casamento Digital Animado">
-    <meta name="twitter:image" content="https://i.postimg.cc/NGy27p9M/Whats-App-Image-2026-09-02-at-09-28-55-removebg-preview.png">
+    <meta name="twitter:title" content="Paulo Lares">
+    <meta name="twitter:description" content="Paulo Lares">
+    <meta name="twitter:image" content="https://i.postimg.cc/906XCfcK/logo-nova-(1).png">
     <link id="siteFavicon" rel="icon" href="">
 
   <!-- Tailwind CSS -->
@@ -814,12 +814,10 @@
         c.main.className = c.main.className.replace(/bg-\S+/g, '');
 
         if (appData.linkperfil.customBg) {
-          // Se houver imagem de fundo, aplica estilo translúcido (glass-card) e limpa cor sólida do tema
           c.main.classList.add('glass-card');
           c.overlay.style.backgroundImage = `url('${appData.linkperfil.customBg}')`;
           c.overlay.classList.remove('hidden');
         } else {
-          // Sem imagem de fundo, aplica o tema normal escolhido
           c.main.classList.remove('glass-card');
           c.main.classList.add(currentTheme.bg);
           c.overlay.style.backgroundImage = 'none';
