@@ -4,16 +4,16 @@
     <meta charset="utf-8">
     <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
     <meta name="theme-color" content="#B76E79">
-    <title>Paulo Lares</title>
-    <meta name="description" content="Paulo Lares">
+    <title>Foto Evento</title>
+    <meta name="description" content="Livro de Casamento Digital Animado">
     <meta property="og:title" content="Foto Evento">
-    <meta property="og:description" content="Paulo Lares">
+    <meta property="og:description" content="Livro de Casamento Digital Animado">
     <meta property="og:type" content="website">
-    <meta property="og:image" content="https://i.postimg.cc/g2Zw2Mpz/Taon-logo.jpg">
+    <meta property="og:image" content="https://i.postimg.cc/NGy27p9M/Whats-App-Image-2026-09-02-at-09-28-55-removebg-preview.png">
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="Paulo Lares">
-    <meta name="twitter:description" content="Paulo Lares">
-    <meta name="twitter:image" content="https://i.postimg.cc/g2Zw2Mpz/Taon-logo.jpg">
+    <meta name="twitter:title" content="Foto Evento">
+    <meta name="twitter:description" content="Livro de Casamento Digital Animado">
+    <meta name="twitter:image" content="https://i.postimg.cc/NGy27p9M/Whats-App-Image-2026-09-02-at-09-28-55-removebg-preview.png">
     <link id="siteFavicon" rel="icon" href="">
 
   <!-- Tailwind CSS -->
@@ -52,10 +52,10 @@
 
   <style>
     .glass-card {
-      background: rgba(255, 255, 255, 0.2);
+      background: rgba(15, 23, 42, 0.65);
       backdrop-filter: blur(12px);
       -webkit-backdrop-filter: blur(12px);
-      border: 1px solid rgba(255, 255, 255, 0.3);
+      border: 1px solid rgba(255, 255, 255, 0.2);
     }
     .custom-scrollbar::-webkit-scrollbar {
       width: 4px;
@@ -78,7 +78,7 @@
         <i class="fa-solid fa-lock"></i>
       </div>
       <h3 class="text-lg font-bold text-white">Área Restrita</h3>
-      <p class="text-xs text-gray-400">Insira a senha de acesso ao Painel de Controle </p>
+      <p class="text-xs text-gray-400">Insira a senha de acesso ao Painel de Controle (Senha padrão: 12345)</p>
       
       <input type="password" id="input-password" placeholder="Digite a senha..." class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-center text-sm text-white tracking-widest outline-none focus:border-indigo-500" onkeydown="if(event.key === 'Enter') verifyPassword()">
       
@@ -203,7 +203,7 @@
           <!-- ABA 2: APARÊNCIA & FONTES -->
           <div id="tab-style" class="tab-content hidden space-y-6">
             <div>
-              <label class="block text-xs font-semibold text-gray-300 mb-3">Tema Visual Pré-definido</label>
+              <label class="block text-xs font-semibold text-gray-300 mb-3">Tema Visual Pré-definido (Ignorado se houver Imagem de Fundo)</label>
               <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
                 <button onclick="setTheme('modern')" class="p-2.5 rounded-xl border border-gray-700 text-xs font-medium bg-gradient-to-br from-indigo-900 to-slate-900 text-white text-left hover:border-indigo-500">Modern</button>
                 <button onclick="setTheme('neon')" class="p-2.5 rounded-xl border border-gray-700 text-xs font-medium bg-gradient-to-br from-purple-900 via-pink-900 to-rose-950 text-white text-left hover:border-pink-500">Neon</button>
@@ -511,7 +511,7 @@
         closePasswordModal();
         switchView('admin');
       } else {
-        alert("Senha incorreta!");
+        alert("Senha incorreta! A senha padrão é 12345.");
         inputEl.value = "";
         inputEl.focus();
       }
@@ -599,6 +599,36 @@
       appData.linkbrand.logo = "";
       document.getElementById('input-logo-url').value = "";
       saveData();
+    }
+
+    function handleLinkIconUpload(e, linkId) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const link = appData.linkbotoes.find(l => l.id === linkId);
+          if (link) {
+            link.icon = event.target.result;
+            saveData();
+          }
+        };
+        reader.readAsDataURL(file);
+      }
+    }
+
+    function handleSocialIconUpload(e, socialId) {
+      const file = e.target.files[0];
+      if (file) {
+        const reader = new FileReader();
+        reader.onload = function(event) {
+          const social = appData.linksocials.find(s => s.id === socialId);
+          if (social) {
+            social.icon = event.target.result;
+            saveData();
+          }
+        };
+        reader.readAsDataURL(file);
+      }
     }
 
     function updateProfileData() {
@@ -782,12 +812,16 @@
       containers.forEach(c => {
         if (!c.main || !c.overlay) return;
         c.main.className = c.main.className.replace(/bg-\S+/g, '');
-        c.main.classList.add(currentTheme.bg);
 
         if (appData.linkperfil.customBg) {
+          // Se houver imagem de fundo, aplica estilo translúcido (glass-card) e limpa cor sólida do tema
+          c.main.classList.add('glass-card');
           c.overlay.style.backgroundImage = `url('${appData.linkperfil.customBg}')`;
           c.overlay.classList.remove('hidden');
         } else {
+          // Sem imagem de fundo, aplica o tema normal escolhido
+          c.main.classList.remove('glass-card');
+          c.main.classList.add(currentTheme.bg);
           c.overlay.style.backgroundImage = 'none';
           c.overlay.classList.add('hidden');
         }
@@ -875,7 +909,9 @@
             const sizeClasses = target.isPreview ? 'py-2 px-3 text-xs' : 'py-3.5 px-4 sm:px-5 text-sm md:text-base';
             const fontClass = appData.linkstyle.fontLink || 'font-inter';
             
-            linkBtn.className = `w-full rounded-2xl ${sizeClasses} font-semibold transition-all duration-200 flex items-center justify-between group shadow-md hover:shadow-lg hover:-translate-y-0.5 ${currentTheme.cardBtn} ${fontClass}`;
+            const btnStyleClass = appData.linkperfil.customBg ? 'glass-card hover:bg-white/30 text-white' : currentTheme.cardBtn;
+
+            linkBtn.className = `w-full rounded-2xl ${sizeClasses} font-semibold transition-all duration-200 flex items-center justify-between group shadow-md hover:shadow-lg hover:-translate-y-0.5 ${btnStyleClass} ${fontClass}`;
             linkBtn.style.color = appData.linkstyle.colorLink || '#ffffff';
             
             if (!target.isPreview) {
@@ -928,8 +964,12 @@
               <div class="sm:col-span-7">
                 <input type="text" value="${s.url}" oninput="updateSocialData(${s.id}, 'url', this.value)" placeholder="URL" class="w-full bg-gray-900 border border-gray-700 rounded px-2.5 py-1 text-xs text-gray-300 outline-none focus:border-indigo-500">
               </div>
-              <div class="sm:col-span-5">
-                <input type="text" value="${s.icon}" oninput="updateSocialData(${s.id}, 'icon', this.value)" placeholder="Ícone (fa-brands...)" class="w-full bg-gray-900 border border-gray-700 rounded px-2.5 py-1 text-xs text-gray-300 outline-none focus:border-indigo-500">
+              <div class="sm:col-span-5 flex items-center space-x-1">
+                <input type="text" value="${s.icon}" oninput="updateSocialData(${s.id}, 'icon', this.value)" placeholder="Ícone ou HTML" class="w-full bg-gray-900 border border-gray-700 rounded px-2 py-1 text-xs text-gray-300 outline-none focus:border-indigo-500">
+                <label class="px-2 py-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded text-xs cursor-pointer whitespace-nowrap shadow transition" title="Upload de Ícone">
+                  <i class="fa-solid fa-upload"></i>
+                  <input type="file" accept="image/*" onchange="handleSocialIconUpload(event, ${s.id})" class="hidden">
+                </label>
               </div>
             </div>
           `;
@@ -972,8 +1012,12 @@
               <div class="sm:col-span-7">
                 <input type="text" value="${l.url}" oninput="updateLinkData(${l.id}, 'url', this.value)" placeholder="URL de destino" class="w-full bg-gray-900 border border-gray-700 rounded px-2.5 py-1 text-xs text-gray-300 outline-none focus:border-indigo-500">
               </div>
-              <div class="sm:col-span-5">
-                <input type="text" value="${l.icon}" oninput="updateLinkData(${l.id}, 'icon', this.value)" placeholder="Ícone (fa-solid...)" class="w-full bg-gray-900 border border-gray-700 rounded px-2.5 py-1 text-xs text-gray-300 outline-none focus:border-indigo-500">
+              <div class="sm:col-span-5 flex items-center space-x-1">
+                <input type="text" value="${l.icon}" oninput="updateLinkData(${l.id}, 'icon', this.value)" placeholder="Ícone ou HTML" class="w-full bg-gray-900 border border-gray-700 rounded px-2 py-1 text-xs text-gray-300 outline-none focus:border-indigo-500">
+                <label class="px-2 py-1 bg-indigo-600 hover:bg-indigo-500 text-white rounded text-xs cursor-pointer whitespace-nowrap shadow transition" title="Upload de Ícone">
+                  <i class="fa-solid fa-upload"></i>
+                  <input type="file" accept="image/*" onchange="handleLinkIconUpload(event, ${l.id})" class="hidden">
+                </label>
               </div>
             </div>
           `;
