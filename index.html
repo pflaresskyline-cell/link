@@ -8,12 +8,12 @@
     <meta name="description" content="Paulo Lares">
     <meta property="og:title" content="Paulo Lares">
     <meta property="og:description" content="Paulo Lares">
-    <meta property="og:type" content="website">
-    <meta property="og:image" content="https://i.postimg.cc/906XCfcK/logo-nova-(1).png">
+    <meta property="og:type" content="Paulo Lares">
+    <meta property="og:image" content="https://i.postimg.cc/fbDLVkY0/Taon-logo-(1).jpg">
     <meta name="twitter:card" content="summary_large_image">
     <meta name="twitter:title" content="Paulo Lares">
     <meta name="twitter:description" content="Paulo Lares">
-    <meta name="twitter:image" content="https://i.postimg.cc/906XCfcK/logo-nova-(1).png">
+    <meta name="twitter:image" content="https://i.postimg.cc/fbDLVkY0/Taon-logo-(1).jpg">
     <link id="siteFavicon" rel="icon" href="">
 
   <!-- Tailwind CSS -->
@@ -129,8 +129,15 @@
             </span>
           </div>
 
-          <h2 id="bio-name" class="text-xl sm:text-2xl font-bold mb-1 tracking-tight drop-shadow-sm text-white">Seu Nome</h2>
-          <p id="bio-desc" class="text-xs sm:text-sm opacity-90 mb-5 sm:mb-6 max-w-xs leading-relaxed font-light text-gray-200">Adicione uma biografia no painel.</p>
+          <!-- BLOCO DE NOME E BIO COM SUPORTE A FUNDO PERSONALIZADO -->
+          <div class="w-full flex flex-col items-center mb-5 sm:mb-6">
+            <div id="bio-name-wrapper" class="inline-block px-3 py-1 rounded-xl transition-all duration-200 mb-1.5">
+              <h2 id="bio-name" class="text-xl sm:text-2xl font-bold tracking-tight drop-shadow-sm text-white">Seu Nome</h2>
+            </div>
+            <div id="bio-desc-wrapper" class="inline-block px-3 py-1.5 rounded-xl transition-all duration-200">
+              <p id="bio-desc" class="text-xs sm:text-sm opacity-90 max-w-xs leading-relaxed font-light text-gray-200">Adicione uma biografia no painel.</p>
+            </div>
+          </div>
 
           <div id="bio-socials" class="flex flex-wrap justify-center gap-2.5 sm:gap-3 mb-6 sm:mb-8 w-full"></div>
 
@@ -215,7 +222,7 @@
             </div>
 
             <div class="bg-gray-900/60 p-4 rounded-xl border border-gray-700/60 space-y-4">
-              <h3 class="text-sm font-semibold text-gray-200">Tipografia & Cores</h3>
+              <h3 class="text-sm font-semibold text-gray-200">Tipografia & Cores do Texto</h3>
               
               <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
                 <div>
@@ -240,7 +247,28 @@
                 </div>
               </div>
 
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <!-- NOVO: FUNDO DO TÍTULO / NOME -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-gray-800">
+                <div>
+                  <label class="block text-xs text-gray-400 mb-1">Cor de Fundo do Nome</label>
+                  <div class="flex items-center space-x-2">
+                    <input type="color" id="bg-color-name" onchange="updateCustomStyles()" class="w-8 h-8 rounded border-0 cursor-pointer bg-transparent">
+                    <input type="text" id="bg-color-name-hex" oninput="syncColorInput('bg-color-name-hex', 'bg-color-name')" placeholder="Hex (opcional)" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-2 py-1 text-xs text-white">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs text-gray-400 mb-1">Opacidade do Fundo do Nome</label>
+                  <select id="bg-opacity-name" onchange="updateCustomStyles()" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-2.5 py-1.5 text-xs text-white">
+                    <option value="0">Invisível (0%)</option>
+                    <option value="0.3">Suave (30%)</option>
+                    <option value="0.6">Médio (60%)</option>
+                    <option value="0.85">Forte (85%)</option>
+                    <option value="1">Sólido (100%)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-gray-800">
                 <div>
                   <label class="block text-xs text-gray-400 mb-1">Fonte da Bio</label>
                   <select id="select-font-desc" onchange="updateCustomStyles()" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-2.5 py-1.5 text-xs text-white">
@@ -263,7 +291,28 @@
                 </div>
               </div>
 
-              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+              <!-- NOVO: FUNDO DA BIO / DESCRIÇÃO -->
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-2 border-t border-gray-800">
+                <div>
+                  <label class="block text-xs text-gray-400 mb-1">Cor de Fundo da Bio</label>
+                  <div class="flex items-center space-x-2">
+                    <input type="color" id="bg-color-desc" onchange="updateCustomStyles()" class="w-8 h-8 rounded border-0 cursor-pointer bg-transparent">
+                    <input type="text" id="bg-color-desc-hex" oninput="syncColorInput('bg-color-desc-hex', 'bg-color-desc')" placeholder="Hex (opcional)" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-2 py-1 text-xs text-white">
+                  </div>
+                </div>
+                <div>
+                  <label class="block text-xs text-gray-400 mb-1">Opacidade do Fundo da Bio</label>
+                  <select id="bg-opacity-desc" onchange="updateCustomStyles()" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-2.5 py-1.5 text-xs text-white">
+                    <option value="0">Invisível (0%)</option>
+                    <option value="0.3">Suave (30%)</option>
+                    <option value="0.6">Médio (60%)</option>
+                    <option value="0.85">Forte (85%)</option>
+                    <option value="1">Sólido (100%)</option>
+                  </select>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3 pt-3 border-t border-gray-800">
                 <div>
                   <label class="block text-xs text-gray-400 mb-1">Fonte dos Links</label>
                   <select id="select-font-link" onchange="updateCustomStyles()" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-2.5 py-1.5 text-xs text-white">
@@ -383,8 +432,14 @@
                 <div id="preview-avatar-placeholder" class="w-14 h-14 rounded-full bg-gray-800/80 border-2 border-white/40 flex items-center justify-center text-gray-400 text-lg shadow-md mb-2">
                   <i class="fa-solid fa-user"></i>
                 </div>
-                <h4 id="preview-name" class="text-sm font-bold mb-0.5 tracking-tight text-white"></h4>
-                <p id="preview-desc" class="text-[10px] opacity-90 mb-3 max-w-[180px] leading-tight font-light text-gray-200"></p>
+                
+                <div id="preview-name-wrapper" class="inline-block px-2 py-0.5 rounded-lg mb-1">
+                  <h4 id="preview-name" class="text-sm font-bold tracking-tight text-white"></h4>
+                </div>
+                <div id="preview-desc-wrapper" class="inline-block px-2 py-1 rounded-lg mb-3">
+                  <p id="preview-desc" class="text-[10px] opacity-90 max-w-[180px] leading-tight font-light text-gray-200"></p>
+                </div>
+
                 <div id="preview-socials" class="flex flex-wrap justify-center gap-1.5 mb-3 w-full"></div>
                 <div id="preview-links" class="w-full space-y-2 mb-3"></div>
               </div>
@@ -413,7 +468,9 @@
       linkstyle: {
         theme: "modern",
         fontName: "font-inter", colorName: "#ffffff",
+        bgColorName: "#000000", bgOpacityName: "0",
         fontDesc: "font-inter", colorDesc: "#e2e8f0",
+        bgColorDesc: "#000000", bgOpacityDesc: "0",
         fontLink: "font-inter", colorLink: "#ffffff"
       },
       linksocials: [],
@@ -437,7 +494,7 @@
             linkperfil: data.linkperfil || emptyData.linkperfil,
             linkbrand: data.linkbrand || emptyData.linkbrand,
             linkfooter: data.linkfooter || emptyData.linkfooter,
-            linkstyle: data.linkstyle || emptyData.linkstyle,
+            linkstyle: { ...emptyData.linkstyle, ...(data.linkstyle || {}) },
             linksocials: data.linksocials || emptyData.linksocials,
             linkbotoes: data.linkbotoes || emptyData.linkbotoes
           };
@@ -654,9 +711,17 @@
       appData.linkstyle.colorName = document.getElementById('color-name').value;
       document.getElementById('color-name-hex').value = appData.linkstyle.colorName;
 
+      appData.linkstyle.bgColorName = document.getElementById('bg-color-name').value;
+      document.getElementById('bg-color-name-hex').value = appData.linkstyle.bgColorName;
+      appData.linkstyle.bgOpacityName = document.getElementById('bg-opacity-name').value;
+
       appData.linkstyle.fontDesc = document.getElementById('select-font-desc').value;
       appData.linkstyle.colorDesc = document.getElementById('color-desc').value;
       document.getElementById('color-desc-hex').value = appData.linkstyle.colorDesc;
+
+      appData.linkstyle.bgColorDesc = document.getElementById('bg-color-desc').value;
+      document.getElementById('bg-color-desc-hex').value = appData.linkstyle.bgColorDesc;
+      appData.linkstyle.bgOpacityDesc = document.getElementById('bg-opacity-desc').value;
 
       appData.linkstyle.fontLink = document.getElementById('select-font-link').value;
       appData.linkstyle.colorLink = document.getElementById('color-link').value;
@@ -766,14 +831,27 @@
       document.getElementById('select-font-name').value = appData.linkstyle.fontName || "font-inter";
       document.getElementById('color-name').value = appData.linkstyle.colorName || "#ffffff";
       document.getElementById('color-name-hex').value = appData.linkstyle.colorName || "#ffffff";
+      document.getElementById('bg-color-name').value = appData.linkstyle.bgColorName || "#000000";
+      document.getElementById('bg-color-name-hex').value = appData.linkstyle.bgColorName || "#000000";
+      document.getElementById('bg-opacity-name').value = appData.linkstyle.bgOpacityName || "0";
 
       document.getElementById('select-font-desc').value = appData.linkstyle.fontDesc || "font-inter";
       document.getElementById('color-desc').value = appData.linkstyle.colorDesc || "#e2e8f0";
       document.getElementById('color-desc-hex').value = appData.linkstyle.colorDesc || "#e2e8f0";
+      document.getElementById('bg-color-desc').value = appData.linkstyle.bgColorDesc || "#000000";
+      document.getElementById('bg-color-desc-hex').value = appData.linkstyle.bgColorDesc || "#000000";
+      document.getElementById('bg-opacity-desc').value = appData.linkstyle.bgOpacityDesc || "0";
 
       document.getElementById('select-font-link').value = appData.linkstyle.fontLink || "font-inter";
       document.getElementById('color-link').value = appData.linkstyle.colorLink || "#ffffff";
       document.getElementById('color-link-hex').value = appData.linkstyle.colorLink || "#ffffff";
+    }
+
+    function hexToRgba(hex, opacity) {
+      let c = hex.replace('#', '');
+      if (c.length === 3) c = c.split('').map(x => x + x).join('');
+      const num = parseInt(c, 16);
+      return `rgba(${(num >> 16) & 255}, ${(num >> 8) & 255}, ${num & 255}, ${opacity})`;
     }
 
     function renderApp() {
@@ -826,8 +904,8 @@
       });
 
       const profileTargets = [
-        { avatar: 'bio-avatar', placeholder: 'bio-avatar-placeholder', name: 'bio-name', desc: 'bio-desc', socials: 'bio-socials', links: 'bio-links', footer: 'bio-footer', footerText: 'bio-footer-text', isPreview: false },
-        { avatar: 'preview-avatar', placeholder: 'preview-avatar-placeholder', name: 'preview-name', desc: 'preview-desc', socials: 'preview-socials', links: 'preview-links', footer: 'preview-footer', footerText: 'preview-footer-text', isPreview: true }
+        { avatar: 'bio-avatar', placeholder: 'bio-avatar-placeholder', nameWrapper: 'bio-name-wrapper', name: 'bio-name', descWrapper: 'bio-desc-wrapper', desc: 'bio-desc', socials: 'bio-socials', links: 'bio-links', footer: 'bio-footer', footerText: 'bio-footer-text', isPreview: false },
+        { avatar: 'preview-avatar', placeholder: 'preview-avatar-placeholder', nameWrapper: 'preview-name-wrapper', name: 'preview-name', descWrapper: 'preview-desc-wrapper', desc: 'preview-desc', socials: 'preview-socials', links: 'preview-links', footer: 'preview-footer', footerText: 'preview-footer-text', isPreview: true }
       ];
 
       profileTargets.forEach(target => {
@@ -845,20 +923,38 @@
           }
         }
         
+        // NOME E FUNDO
         const elName = document.getElementById(target.name);
-        if (elName) {
+        const elNameWrapper = document.getElementById(target.nameWrapper);
+        if (elName && elNameWrapper) {
           elName.textContent = appData.linkperfil.name || "Seu Nome";
           elName.className = elName.className.replace(/font-\S+/g, '');
           elName.classList.add(appData.linkstyle.fontName || 'font-inter');
           elName.style.color = appData.linkstyle.colorName || '#ffffff';
+
+          const opName = parseFloat(appData.linkstyle.bgOpacityName || 0);
+          if (opName > 0) {
+            elNameWrapper.style.backgroundColor = hexToRgba(appData.linkstyle.bgColorName || '#000000', opName);
+          } else {
+            elNameWrapper.style.backgroundColor = 'transparent';
+          }
         }
 
+        // BIO E FUNDO
         const elDesc = document.getElementById(target.desc);
-        if (elDesc) {
+        const elDescWrapper = document.getElementById(target.descWrapper);
+        if (elDesc && elDescWrapper) {
           elDesc.textContent = appData.linkperfil.desc || "";
           elDesc.className = elDesc.className.replace(/font-\S+/g, '');
           elDesc.classList.add(appData.linkstyle.fontDesc || 'font-inter');
           elDesc.style.color = appData.linkstyle.colorDesc || '#e2e8f0';
+
+          const opDesc = parseFloat(appData.linkstyle.bgOpacityDesc || 0);
+          if (opDesc > 0) {
+            elDescWrapper.style.backgroundColor = hexToRgba(appData.linkstyle.bgColorDesc || '#000000', opDesc);
+          } else {
+            elDescWrapper.style.backgroundColor = 'transparent';
+          }
         }
 
         const elFooter = document.getElementById(target.footer);
