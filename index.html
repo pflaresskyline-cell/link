@@ -1,0 +1,1015 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+    <meta name="theme-color" content="#B76E79">
+    <title>Foto Evento</title>
+    <meta name="description" content="Livro de Casamento Digital Animado">
+    <meta property="og:title" content="Foto Evento">
+    <meta property="og:description" content="Livro de Casamento Digital Animado">
+    <meta property="og:type" content="website">
+    <meta property="og:image" content="https://i.postimg.cc/NGy27p9M/Whats-App-Image-2026-09-02-at-09-28-55-removebg-preview.png">
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Foto Evento">
+    <meta name="twitter:description" content="Livro de Casamento Digital Animado">
+    <meta name="twitter:image" content="https://i.postimg.cc/NGy27p9M/Whats-App-Image-2026-09-02-at-09-28-55-removebg-preview.png">
+    <link id="siteFavicon" rel="icon" href="">
+
+  <!-- Tailwind CSS -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  
+  <!-- Font Awesome Icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+  
+  <!-- Supabase JS Client -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Fira+Code:wght@400;600&family=Inter:wght@300;400;600;700&family=Montserrat:wght@400;600;700&family=Outfit:wght@400;600;700&family=Playfair+Display:ital,wght@0,600;1,400&family=Poppins:wght@300;400;600;700&family=Press+Start+2P&family=Roboto:wght@300;400;500;700&display=swap" rel="stylesheet">
+
+  <script>
+    tailwind.config = {
+      darkMode: 'class',
+      theme: {
+        extend: {
+          fontFamily: {
+            inter: ['Inter', 'sans-serif'],
+            poppins: ['Poppins', 'sans-serif'],
+            roboto: ['Roboto', 'sans-serif'],
+            montserrat: ['Montserrat', 'sans-serif'],
+            playfair: ['Playfair Display', 'serif'],
+            pressstart: ['"Press Start 2P"', 'cursive'],
+            firacode: ['Fira Code', 'monospace'],
+            outfit: ['Outfit', 'sans-serif'],
+          }
+        }
+      }
+    }
+  </script>
+
+  <style>
+    .glass-card {
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+    }
+    .custom-scrollbar::-webkit-scrollbar {
+      width: 4px;
+    }
+    .custom-scrollbar::-webkit-scrollbar-track {
+      background: rgba(0, 0, 0, 0.05);
+    }
+    .custom-scrollbar::-webkit-scrollbar-thumb {
+      background: rgba(0, 0, 0, 0.2);
+      border-radius: 4px;
+    }
+  </style>
+</head>
+<body class="bg-gray-900 text-gray-100 min-h-screen font-inter antialiased flex flex-col w-full overflow-x-hidden">
+
+  <!-- MODAL DE SENHA -->
+  <div id="password-modal" class="fixed inset-0 bg-black/80 z-50 flex items-center justify-center p-4 hidden">
+    <div class="bg-gray-800 border border-gray-700 rounded-3xl p-6 w-full max-w-sm text-center shadow-2xl space-y-4">
+      <div class="w-12 h-12 bg-indigo-600/20 text-indigo-400 rounded-full flex items-center justify-center mx-auto text-xl">
+        <i class="fa-solid fa-lock"></i>
+      </div>
+      <h3 class="text-lg font-bold text-white">Área Restrita</h3>
+      <p class="text-xs text-gray-400">Insira a senha de acesso ao Painel de Controle </p>
+      
+      <input type="password" id="input-password" placeholder="Digite a senha..." class="w-full bg-gray-900 border border-gray-700 rounded-xl px-4 py-2.5 text-center text-sm text-white tracking-widest outline-none focus:border-indigo-500" onkeydown="if(event.key === 'Enter') verifyPassword()">
+      
+      <div class="flex space-x-2 pt-2">
+        <button onclick="closePasswordModal()" class="w-1/2 py-2 bg-gray-700 hover:bg-gray-600 text-gray-300 rounded-xl text-xs font-semibold transition">Cancelar</button>
+        <button onclick="verifyPassword()" class="w-1/2 py-2 bg-indigo-600 hover:bg-indigo-500 text-white rounded-xl text-xs font-semibold transition shadow">Entrar</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- BARRA DE NAVEGAÇÃO SUPERIOR -->
+  <header class="bg-gray-800 border-b border-gray-700 sticky top-0 z-40 shadow-md w-full">
+    <div class="max-w-7xl mx-auto px-3 h-14 flex items-center justify-between">
+      <div class="flex items-center space-x-2.5 truncate">
+        <img id="header-logo-img" src="" alt="Logo" class="w-7 h-7 rounded-full object-cover hidden">
+        <span id="header-logo-icon" class="text-indigo-400 text-lg"><i class="fa-solid fa-tree"></i></span>
+        <h1 id="header-title" class="font-bold text-sm md:text-base text-white tracking-wide truncate">Foto Evento</h1>
+      </div>
+
+      <!-- BOTÕES DISCRETOS APENAS COM ÍCONES NO CANTO SUPERIOR DIREITO -->
+      <div class="flex items-center space-x-1.5 bg-gray-900/60 p-1 rounded-xl border border-gray-700/60">
+        <button id="nav-btn-public" onclick="switchView('public')" class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 bg-indigo-600 text-white shadow" title="Ver Página Pública">
+          <i class="fa-solid fa-eye text-xs"></i>
+        </button>
+        <button id="nav-btn-admin" onclick="requestAdminAccess()" class="w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 text-gray-400 hover:text-white hover:bg-gray-800" title="Painel de Controle (Restrito)">
+          <i class="fa-solid fa-sliders text-xs"></i>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <!-- CONTEÚDO PRINCIPAL -->
+  <main class="flex-grow flex flex-col w-full">
+    
+    <!-- VISTA PÚBLICA (PÁGINA BIO) -->
+    <section id="view-public" class="w-full flex-grow flex items-center justify-center p-3 sm:p-4 transition-all duration-300 flex">
+      <div id="bio-container" class="w-full max-w-md rounded-3xl p-5 sm:p-6 md:p-8 flex flex-col items-center text-center shadow-2xl transition-all duration-300 relative overflow-hidden my-auto min-h-[520px] justify-between">
+        <div id="bg-overlay" class="absolute inset-0 bg-cover bg-center -z-10 transition-all duration-300"></div>
+
+        <div class="w-full flex flex-col items-center">
+          <div class="relative group mb-3 sm:mb-4">
+            <img id="bio-avatar" src="" alt="Foto de Perfil" class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full object-cover border-4 border-white/40 shadow-xl transition transform group-hover:scale-105 hidden">
+            <div id="bio-avatar-placeholder" class="w-20 h-20 sm:w-24 sm:h-24 md:w-28 md:h-28 rounded-full bg-gray-800/80 border-4 border-white/40 flex items-center justify-center text-gray-400 text-xl sm:text-2xl shadow-xl">
+              <i class="fa-solid fa-user"></i>
+            </div>
+            <span class="absolute bottom-1 right-1 bg-blue-500 text-white w-5 h-5 sm:w-6 sm:h-6 rounded-full flex items-center justify-center text-[10px] sm:text-xs shadow-md" title="Verificado">
+              <i class="fa-solid fa-check"></i>
+            </span>
+          </div>
+
+          <h2 id="bio-name" class="text-xl sm:text-2xl font-bold mb-1 tracking-tight drop-shadow-sm text-white">Seu Nome</h2>
+          <p id="bio-desc" class="text-xs sm:text-sm opacity-90 mb-5 sm:mb-6 max-w-xs leading-relaxed font-light text-gray-200">Adicione uma biografia no painel.</p>
+
+          <div id="bio-socials" class="flex flex-wrap justify-center gap-2.5 sm:gap-3 mb-6 sm:mb-8 w-full"></div>
+
+          <div id="bio-links" class="w-full space-y-3 mb-4 sm:mb-6"></div>
+        </div>
+
+        <footer id="bio-footer" class="text-[11px] sm:text-xs opacity-75 pt-3 border-t border-white/10 w-full text-center">
+          <span id="bio-footer-text">Criado com Foto Evento</span>
+        </footer>
+      </div>
+    </section>
+
+    <!-- VISTA DO PAINEL ADMINISTRATIVO -->
+    <section id="view-admin" class="hidden w-full max-w-7xl mx-auto p-3 sm:p-4 md:p-6 grid grid-cols-1 lg:grid-cols-12 gap-6 md:gap-8">
+      
+      <!-- CONTROLES DO PAINEL -->
+      <div class="lg:col-span-7 space-y-6">
+        
+        <div class="bg-gray-800 border border-gray-700 rounded-2xl p-4 md:p-6 shadow-xl">
+          <h2 class="text-lg md:text-xl font-bold text-white mb-2 flex items-center">
+            <i class="fa-solid fa-pen-to-square text-indigo-400 mr-2.5"></i> Editar Perfil & Links
+          </h2>
+          <p class="text-xs text-gray-400 mb-6">Personalize seus dados, cores, fontes, redes sociais e marca. As alterações salvam automaticamente no Supabase.</p>
+
+          <!-- NAVEGAÇÃO DE ABAS INTERNAS DO PAINEL -->
+          <div class="flex flex-wrap gap-1.5 sm:gap-2 mb-6 border-b border-gray-700 pb-3">
+            <button onclick="switchTab('tab-links')" id="btn-tab-links" class="tab-btn px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-indigo-600 text-white transition">Links</button>
+            <button onclick="switchTab('tab-style')" id="btn-tab-style" class="tab-btn px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-gray-700 text-gray-300 hover:bg-gray-600 transition">Aparência</button>
+            <button onclick="switchTab('tab-brand')" id="btn-tab-brand" class="tab-btn px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-gray-700 text-gray-300 hover:bg-gray-600 transition">Marca</button>
+            <button onclick="switchTab('tab-social')" id="btn-tab-social" class="tab-btn px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-gray-700 text-gray-300 hover:bg-gray-600 transition">Redes</button>
+            <button onclick="switchTab('tab-stats')" id="btn-tab-stats" class="tab-btn px-2.5 sm:px-3 py-1.5 rounded-lg text-xs font-semibold bg-gray-700 text-gray-300 hover:bg-gray-600 transition">Cliques</button>
+          </div>
+
+          <!-- ABA 1: LINKS -->
+          <div id="tab-links" class="tab-content space-y-6">
+            <div class="bg-gray-900/60 p-4 rounded-xl border border-gray-700/60">
+              <h3 class="text-sm font-semibold text-gray-200 mb-4 flex items-center">
+                <i class="fa-solid fa-user-gear text-indigo-400 mr-2"></i> Informações do Perfil
+              </h3>
+              <div class="space-y-3">
+                <div>
+                  <label class="block text-xs font-medium text-gray-400 mb-1">URL da Foto de Perfil</label>
+                  <input type="text" id="input-avatar" oninput="updateProfileData()" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-gray-400 mb-1">Nome Exibido</label>
+                  <input type="text" id="input-name" oninput="updateProfileData()" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+                </div>
+                <div>
+                  <label class="block text-xs font-medium text-gray-400 mb-1">Bio / Descrição Curta</label>
+                  <textarea id="input-desc" oninput="updateProfileData()" rows="2" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none"></textarea>
+                </div>
+              </div>
+            </div>
+
+            <div>
+              <div class="flex items-center justify-between mb-4">
+                <h3 class="text-sm font-semibold text-gray-200 flex items-center">
+                  <i class="fa-solid fa-link text-indigo-400 mr-2"></i> Lista de Links
+                </h3>
+                <button onclick="addLink()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-medium shadow transition flex items-center">
+                  <i class="fa-solid fa-plus mr-1"></i> Adicionar
+                </button>
+              </div>
+
+              <div id="admin-links-list" class="space-y-3 custom-scrollbar max-h-[350px] overflow-y-auto pr-1"></div>
+            </div>
+          </div>
+
+          <!-- ABA 2: APARÊNCIA & FONTES -->
+          <div id="tab-style" class="tab-content hidden space-y-6">
+            <div>
+              <label class="block text-xs font-semibold text-gray-300 mb-3">Tema Visual Pré-definido</label>
+              <div class="grid grid-cols-2 sm:grid-cols-3 gap-2.5">
+                <button onclick="setTheme('modern')" class="p-2.5 rounded-xl border border-gray-700 text-xs font-medium bg-gradient-to-br from-indigo-900 to-slate-900 text-white text-left hover:border-indigo-500">Modern</button>
+                <button onclick="setTheme('neon')" class="p-2.5 rounded-xl border border-gray-700 text-xs font-medium bg-gradient-to-br from-purple-900 via-pink-900 to-rose-950 text-white text-left hover:border-pink-500">Neon</button>
+                <button onclick="setTheme('dark')" class="p-2.5 rounded-xl border border-gray-700 text-xs font-medium bg-gray-950 text-gray-100 text-left hover:border-gray-500">Dark</button>
+                <button onclick="setTheme('light')" class="p-2.5 rounded-xl border border-gray-700 text-xs font-medium bg-gray-100 text-gray-900 text-left hover:border-gray-400">Light</button>
+                <button onclick="setTheme('glass')" class="p-2.5 rounded-xl border border-gray-700 text-xs font-medium bg-cyan-950 text-cyan-100 text-left hover:border-cyan-500">Glass</button>
+                <button onclick="setTheme('pastel')" class="p-2.5 rounded-xl border border-gray-700 text-xs font-medium bg-amber-950 text-amber-100 text-left hover:border-amber-500">Sunset</button>
+              </div>
+            </div>
+
+            <div class="bg-gray-900/60 p-4 rounded-xl border border-gray-700/60 space-y-4">
+              <h3 class="text-sm font-semibold text-gray-200">Tipografia & Cores</h3>
+              
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs text-gray-400 mb-1">Fonte do Nome</label>
+                  <select id="select-font-name" onchange="updateCustomStyles()" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-2.5 py-1.5 text-xs text-white">
+                    <option value="font-inter">Inter</option>
+                    <option value="font-poppins">Poppins</option>
+                    <option value="font-roboto">Roboto</option>
+                    <option value="font-montserrat">Montserrat</option>
+                    <option value="font-playfair">Playfair</option>
+                    <option value="font-pressstart">Press Start</option>
+                    <option value="font-firacode">Fira Code</option>
+                    <option value="font-outfit">Outfit</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs text-gray-400 mb-1">Cor do Nome</label>
+                  <div class="flex items-center space-x-2">
+                    <input type="color" id="color-name" onchange="updateCustomStyles()" class="w-8 h-8 rounded border-0 cursor-pointer bg-transparent">
+                    <input type="text" id="color-name-hex" oninput="syncColorInput('color-name-hex', 'color-name')" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-2 py-1 text-xs text-white">
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs text-gray-400 mb-1">Fonte da Bio</label>
+                  <select id="select-font-desc" onchange="updateCustomStyles()" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-2.5 py-1.5 text-xs text-white">
+                    <option value="font-inter">Inter</option>
+                    <option value="font-poppins">Poppins</option>
+                    <option value="font-roboto">Roboto</option>
+                    <option value="font-montserrat">Montserrat</option>
+                    <option value="font-playfair">Playfair</option>
+                    <option value="font-pressstart">Press Start</option>
+                    <option value="font-firacode">Fira Code</option>
+                    <option value="font-outfit">Outfit</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs text-gray-400 mb-1">Cor da Bio</label>
+                  <div class="flex items-center space-x-2">
+                    <input type="color" id="color-desc" onchange="updateCustomStyles()" class="w-8 h-8 rounded border-0 cursor-pointer bg-transparent">
+                    <input type="text" id="color-desc-hex" oninput="syncColorInput('color-desc-hex', 'color-desc')" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-2 py-1 text-xs text-white">
+                  </div>
+                </div>
+              </div>
+
+              <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                <div>
+                  <label class="block text-xs text-gray-400 mb-1">Fonte dos Links</label>
+                  <select id="select-font-link" onchange="updateCustomStyles()" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-2.5 py-1.5 text-xs text-white">
+                    <option value="font-inter">Inter</option>
+                    <option value="font-poppins">Poppins</option>
+                    <option value="font-roboto">Roboto</option>
+                    <option value="font-montserrat">Montserrat</option>
+                    <option value="font-playfair">Playfair</option>
+                    <option value="font-pressstart">Press Start</option>
+                    <option value="font-firacode">Fira Code</option>
+                    <option value="font-outfit">Outfit</option>
+                  </select>
+                </div>
+                <div>
+                  <label class="block text-xs text-gray-400 mb-1">Cor do Texto do Link</label>
+                  <div class="flex items-center space-x-2">
+                    <input type="color" id="color-link" onchange="updateCustomStyles()" class="w-8 h-8 rounded border-0 cursor-pointer bg-transparent">
+                    <input type="text" id="color-link-hex" oninput="syncColorInput('color-link-hex', 'color-link')" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-2 py-1 text-xs text-white">
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <div class="bg-gray-900/60 p-4 rounded-xl border border-gray-700/60 space-y-3">
+              <h3 class="text-sm font-semibold text-gray-200">Imagem de Fundo</h3>
+              <div>
+                <label class="block text-xs text-gray-400 mb-1">URL da Imagem de Fundo</label>
+                <input type="text" id="input-bg-url" oninput="updateBgUrl(this.value)" placeholder="https://..." class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+              </div>
+              <div class="flex items-center justify-between pt-1">
+                <span class="text-xs text-gray-400">Remover Fundo</span>
+                <button onclick="removeBgImage()" class="px-2.5 py-1 bg-red-900/50 hover:bg-red-800 text-red-200 rounded text-xs transition">Remover</button>
+              </div>
+            </div>
+          </div>
+
+          <!-- ABA 3: MARCA & RODAPÉ -->
+          <div id="tab-brand" class="tab-content hidden space-y-6">
+            <div class="bg-gray-900/60 p-4 rounded-xl border border-gray-700/60 space-y-4">
+              <h3 class="text-sm font-semibold text-gray-200 flex items-center">
+                <i class="fa-solid fa-copyright text-indigo-400 mr-2"></i> Marca do Topo (Header)
+              </h3>
+              <div>
+                <label class="block text-xs text-gray-400 mb-1">Título da Marca</label>
+                <input type="text" id="input-header-title" oninput="updateBrandData()" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+              </div>
+              <div>
+                <label class="block text-xs text-gray-400 mb-1">URL do Logo do Topo</label>
+                <input type="text" id="input-logo-url" oninput="updateLogoUrl(this.value)" placeholder="https://..." class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+              </div>
+              <button onclick="removeLogoImage()" class="px-2.5 py-1 bg-red-900/50 hover:bg-red-800 text-red-200 rounded text-xs transition">Remover Logo</button>
+            </div>
+
+            <div class="bg-gray-900/60 p-4 rounded-xl border border-gray-700/60 space-y-4">
+              <h3 class="text-sm font-semibold text-gray-200 flex items-center justify-between">
+                <span><i class="fa-solid fa-shoe-prints text-indigo-400 mr-2"></i> Rodapé</span>
+                <label class="relative inline-flex items-center cursor-pointer">
+                  <input type="checkbox" id="toggle-footer-visible" onchange="updateFooterData()" class="sr-only peer" checked>
+                  <div class="w-9 h-5 bg-gray-700 peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-indigo-600"></div>
+                </label>
+              </h3>
+              <div>
+                <label class="block text-xs text-gray-400 mb-1">Texto do Rodapé</label>
+                <input type="text" id="input-footer-text" oninput="updateFooterData()" class="w-full bg-gray-800 border border-gray-700 rounded-lg px-3 py-2 text-sm text-white focus:ring-2 focus:ring-indigo-500 outline-none">
+              </div>
+            </div>
+          </div>
+
+          <!-- ABA 4: REDES SOCIAIS (DINÂMICO) -->
+          <div id="tab-social" class="tab-content hidden space-y-4">
+            <div class="flex items-center justify-between mb-2">
+              <h3 class="text-sm font-semibold text-gray-200 flex items-center">
+                <i class="fa-solid fa-share-nodes text-indigo-400 mr-2"></i> Redes Sociais
+              </h3>
+              <button onclick="addSocial()" class="px-3 py-1.5 bg-indigo-600 hover:bg-indigo-500 text-white rounded-lg text-xs font-medium shadow transition flex items-center">
+                <i class="fa-solid fa-plus mr-1"></i> Adicionar
+              </button>
+            </div>
+            <div id="admin-socials-list" class="space-y-3 custom-scrollbar max-h-[350px] overflow-y-auto pr-1"></div>
+          </div>
+
+          <!-- ABA 5: ESTATÍSTICAS -->
+          <div id="tab-stats" class="tab-content hidden space-y-4">
+            <h3 class="text-sm font-semibold text-gray-200 mb-2">Desempenho de Cliques</h3>
+            <div id="stats-list" class="space-y-3"></div>
+          </div>
+
+          <!-- AÇÕES DO RODAPÉ DO PAINEL -->
+          <div class="pt-5 border-t border-gray-700 flex flex-wrap gap-2.5 justify-between items-center">
+            <button onclick="resetData()" class="px-3 py-1.5 bg-red-900/40 hover:bg-red-800 text-red-200 border border-red-800 rounded-lg text-xs font-medium transition">
+              <i class="fa-solid fa-rotate-left mr-1"></i> Resetar Tudo
+            </button>
+            <button onclick="copyShareUrl()" class="px-4 py-1.5 bg-gray-700 hover:bg-gray-600 text-white rounded-lg text-xs font-medium transition flex items-center">
+              <i class="fa-solid fa-share-nodes mr-1.5"></i> Copiar Link
+            </button>
+          </div>
+        </div>
+      </div>
+
+      <!-- SIMULADOR MOBILE / LIVE PREVIEW -->
+      <div class="lg:col-span-5 hidden lg:block">
+        <div class="sticky top-20 bg-gray-800 border border-gray-700 rounded-3xl p-4 shadow-2xl flex flex-col items-center">
+          <div class="text-xs text-gray-400 font-medium mb-3 flex items-center">
+            <i class="fa-solid fa-mobile-screen mr-2 text-indigo-400"></i> Simulação em Tempo Real
+          </div>
+          
+          <div class="w-[300px] h-[580px] bg-gray-900 rounded-[35px] p-2.5 border-4 border-gray-700 shadow-inner relative overflow-hidden flex flex-col">
+            <div class="w-28 h-3.5 bg-gray-800 rounded-b-xl mx-auto mb-2 flex items-center justify-center">
+              <div class="w-2.5 h-2.5 bg-gray-900 rounded-full"></div>
+            </div>
+
+            <div id="preview-container" class="w-full flex-grow rounded-2xl p-3 flex flex-col items-center text-center overflow-y-auto custom-scrollbar justify-between relative">
+              <div id="preview-bg-overlay" class="absolute inset-0 bg-cover bg-center -z-10"></div>
+              
+              <div class="w-full flex flex-col items-center">
+                <img id="preview-avatar" src="" alt="Avatar" class="w-14 h-14 rounded-full object-cover border-2 border-white/40 shadow-md mb-2 hidden">
+                <div id="preview-avatar-placeholder" class="w-14 h-14 rounded-full bg-gray-800/80 border-2 border-white/40 flex items-center justify-center text-gray-400 text-lg shadow-md mb-2">
+                  <i class="fa-solid fa-user"></i>
+                </div>
+                <h4 id="preview-name" class="text-sm font-bold mb-0.5 tracking-tight text-white"></h4>
+                <p id="preview-desc" class="text-[10px] opacity-90 mb-3 max-w-[180px] leading-tight font-light text-gray-200"></p>
+                <div id="preview-socials" class="flex flex-wrap justify-center gap-1.5 mb-3 w-full"></div>
+                <div id="preview-links" class="w-full space-y-2 mb-3"></div>
+              </div>
+
+              <footer id="preview-footer" class="text-[9px] opacity-75 pt-2 border-t border-white/10 w-full text-center">
+                <span id="preview-footer-text"></span>
+              </footer>
+            </div>
+          </div>
+        </div>
+      </div>
+
+    </section>
+  </main>
+
+  <!-- LÓGICA SUPABASE E APLICAÇÃO -->
+  <script>
+    const SUPABASE_URL = "https://gctbkuyionzqlipybgdj.supabase.co";
+    const SUPABASE_KEY = "sb_publishable_jLImFxsKIdmQBibJ3ERBXQ_egPdn8ye";
+    const supabaseClient = window.supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
+    const emptyData = {
+      linkperfil: { name: "", desc: "", avatar: "", customBg: "" },
+      linkbrand: { title: "Foto Evento", logo: "" },
+      linkfooter: { text: "Criado com Foto Evento", visible: true },
+      linkstyle: {
+        theme: "modern",
+        fontName: "font-inter", colorName: "#ffffff",
+        fontDesc: "font-inter", colorDesc: "#e2e8f0",
+        fontLink: "font-inter", colorLink: "#ffffff"
+      },
+      linksocials: [],
+      linkbotoes: []
+    };
+
+    let appData = JSON.parse(JSON.stringify(emptyData));
+    let remoteRecordId = null;
+
+    async function loadFromSupabase() {
+      try {
+        const { data, error } = await supabaseClient
+          .from('linkconfig')
+          .select('*')
+          .limit(1)
+          .single();
+
+        if (data) {
+          remoteRecordId = data.id;
+          appData = {
+            linkperfil: data.linkperfil || emptyData.linkperfil,
+            linkbrand: data.linkbrand || emptyData.linkbrand,
+            linkfooter: data.linkfooter || emptyData.linkfooter,
+            linkstyle: data.linkstyle || emptyData.linkstyle,
+            linksocials: data.linksocials || emptyData.linksocials,
+            linkbotoes: data.linkbotoes || emptyData.linkbotoes
+          };
+        }
+      } catch (err) {
+        console.log("Iniciando com dados locais ou tabela vazia no Supabase.");
+      }
+      populateFormInputs();
+      renderApp();
+    }
+
+    async function saveData() {
+      renderApp();
+      try {
+        if (remoteRecordId) {
+          await supabaseClient
+            .from('linkconfig')
+            .update({
+              linkperfil: appData.linkperfil,
+              linkbrand: appData.linkbrand,
+              linkfooter: appData.linkfooter,
+              linkstyle: appData.linkstyle,
+              linksocials: appData.linksocials,
+              linkbotoes: appData.linkbotoes,
+              updated_at: new Date()
+            })
+            .eq('id', remoteRecordId);
+        } else {
+          const { data, error } = await supabaseClient
+            .from('linkconfig')
+            .insert([{
+              linkidentificador: 'default_user',
+              linkperfil: appData.linkperfil,
+              linkbrand: appData.linkbrand,
+              linkfooter: appData.linkfooter,
+              linkstyle: appData.linkstyle,
+              linksocials: appData.linksocials,
+              linkbotoes: appData.linkbotoes
+            }])
+            .select()
+            .single();
+          
+          if (data) remoteRecordId = data.id;
+        }
+      } catch (e) {
+        console.error("Erro ao sincronizar com Supabase:", e);
+      }
+    }
+
+    function requestAdminAccess() {
+      const modal = document.getElementById('password-modal');
+      const inputPass = document.getElementById('input-password');
+      if (modal && inputPass) {
+        modal.classList.remove('hidden');
+        inputPass.value = "";
+        inputPass.focus();
+      }
+    }
+
+    function closePasswordModal() {
+      const modal = document.getElementById('password-modal');
+      if (modal) modal.classList.add('hidden');
+    }
+
+    function verifyPassword() {
+      const inputEl = document.getElementById('input-password');
+      if (!inputEl) return;
+      const pass = inputEl.value.trim();
+      
+      if (pass === "12345") {
+        closePasswordModal();
+        switchView('admin');
+      } else {
+        alert("Senha incorreta!");
+        inputEl.value = "";
+        inputEl.focus();
+      }
+    }
+
+    function switchView(view) {
+      const publicSec = document.getElementById('view-public');
+      const adminSec = document.getElementById('view-admin');
+      const btnPublic = document.getElementById('nav-btn-public');
+      const btnAdmin = document.getElementById('nav-btn-admin');
+
+      closePasswordModal();
+
+      if (view === 'public') {
+        if (publicSec && adminSec && btnPublic && btnAdmin) {
+          publicSec.classList.remove('hidden');
+          publicSec.classList.add('flex');
+          adminSec.classList.add('hidden');
+          btnPublic.className = "w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 bg-indigo-600 text-white shadow";
+          btnAdmin.className = "w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 text-gray-400 hover:text-white hover:bg-gray-800";
+        }
+      } else if (view === 'admin') {
+        if (publicSec && adminSec && btnPublic && btnAdmin) {
+          publicSec.classList.add('hidden');
+          publicSec.classList.remove('flex');
+          adminSec.classList.remove('hidden');
+          btnAdmin.className = "w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 bg-indigo-600 text-white shadow";
+          btnPublic.className = "w-8 h-8 rounded-lg flex items-center justify-center transition-all duration-200 text-gray-400 hover:text-white hover:bg-gray-800";
+        }
+      }
+    }
+
+    function switchTab(tabId) {
+      document.querySelectorAll('.tab-content').forEach(el => el.classList.add('hidden'));
+      document.querySelectorAll('.tab-btn').forEach(btn => {
+        btn.classList.remove('bg-indigo-600', 'text-white');
+        btn.classList.add('bg-gray-700', 'text-gray-300');
+      });
+
+      const targetTab = document.getElementById(tabId);
+      const activeBtn = document.getElementById(`btn-${tabId}`);
+      if (targetTab) targetTab.classList.remove('hidden');
+      if (activeBtn) {
+        activeBtn.classList.remove('bg-gray-700', 'text-gray-300');
+        activeBtn.classList.add('bg-indigo-600', 'text-white');
+      }
+    }
+
+    function registerClick(linkId, url) {
+      const link = appData.linkbotoes.find(l => l.id === linkId);
+      if (link) {
+        link.clicks = (link.clicks || 0) + 1;
+        saveData();
+      }
+      if (url) {
+        window.open(url, '_blank');
+      }
+    }
+
+    function syncColorInput(textId, colorId) {
+      const textVal = document.getElementById(textId).value;
+      if (/^#[0-9A-F]{6}$/i.test(textVal)) {
+        document.getElementById(colorId).value = textVal;
+        updateCustomStyles();
+      }
+    }
+
+    function updateBgUrl(url) {
+      appData.linkperfil.customBg = url;
+      saveData();
+    }
+
+    function removeBgImage() {
+      appData.linkperfil.customBg = "";
+      document.getElementById('input-bg-url').value = "";
+      saveData();
+    }
+
+    function updateLogoUrl(url) {
+      appData.linkbrand.logo = url;
+      saveData();
+    }
+
+    function removeLogoImage() {
+      appData.linkbrand.logo = "";
+      document.getElementById('input-logo-url').value = "";
+      saveData();
+    }
+
+    function updateProfileData() {
+      appData.linkperfil.avatar = document.getElementById('input-avatar').value;
+      appData.linkperfil.name = document.getElementById('input-name').value;
+      appData.linkperfil.desc = document.getElementById('input-desc').value;
+      saveData();
+    }
+
+    function updateBrandData() {
+      appData.linkbrand.title = document.getElementById('input-header-title').value;
+      saveData();
+    }
+
+    function updateFooterData() {
+      appData.linkfooter.text = document.getElementById('input-footer-text').value;
+      appData.linkfooter.visible = document.getElementById('toggle-footer-visible').checked;
+      saveData();
+    }
+
+    function updateCustomStyles() {
+      appData.linkstyle.fontName = document.getElementById('select-font-name').value;
+      appData.linkstyle.colorName = document.getElementById('color-name').value;
+      document.getElementById('color-name-hex').value = appData.linkstyle.colorName;
+
+      appData.linkstyle.fontDesc = document.getElementById('select-font-desc').value;
+      appData.linkstyle.colorDesc = document.getElementById('color-desc').value;
+      document.getElementById('color-desc-hex').value = appData.linkstyle.colorDesc;
+
+      appData.linkstyle.fontLink = document.getElementById('select-font-link').value;
+      appData.linkstyle.colorLink = document.getElementById('color-link').value;
+      document.getElementById('color-link-hex').value = appData.linkstyle.colorLink;
+
+      saveData();
+    }
+
+    function setTheme(themeName) {
+      appData.linkstyle.theme = themeName;
+      saveData();
+    }
+
+    function addSocial() {
+      const newId = appData.linksocials.length ? Math.max(...appData.linksocials.map(s => s.id)) + 1 : 1;
+      appData.linksocials.push({ id: newId, name: "Nova Rede", url: "", icon: "fa-solid fa-globe", active: true });
+      saveData();
+    }
+
+    function removeSocial(id) {
+      appData.linksocials = appData.linksocials.filter(s => s.id !== id);
+      saveData();
+    }
+
+    function toggleSocial(id) {
+      const social = appData.linksocials.find(s => s.id === id);
+      if (social) {
+        social.active = !social.active;
+        saveData();
+      }
+    }
+
+    function updateSocialData(id, field, value) {
+      const social = appData.linksocials.find(s => s.id === id);
+      if (social) {
+        social[field] = value;
+        saveData();
+      }
+    }
+
+    function addLink() {
+      const newId = appData.linkbotoes.length ? Math.max(...appData.linkbotoes.map(l => l.id)) + 1 : 1;
+      appData.linkbotoes.push({ id: newId, title: "Novo Link", url: "", icon: "fa-solid fa-link", clicks: 0, active: true });
+      saveData();
+    }
+
+    function removeLink(id) {
+      appData.linkbotoes = appData.linkbotoes.filter(l => l.id !== id);
+      saveData();
+    }
+
+    function toggleLink(id) {
+      const link = appData.linkbotoes.find(l => l.id === id);
+      if (link) {
+        link.active = !link.active;
+        saveData();
+      }
+    }
+
+    function moveLink(id, direction) {
+      const index = appData.linkbotoes.findIndex(l => l.id === id);
+      if (index < 0) return;
+      if (direction === 'up' && index > 0) {
+        const temp = appData.linkbotoes[index];
+        appData.linkbotoes[index] = appData.linkbotoes[index - 1];
+        appData.linkbotoes[index - 1] = temp;
+      } else if (direction === 'down' && index < appData.linkbotoes.length - 1) {
+        const temp = appData.linkbotoes[index];
+        appData.linkbotoes[index] = appData.linkbotoes[index + 1];
+        appData.linkbotoes[index + 1] = temp;
+      }
+      saveData();
+    }
+
+    function updateLinkData(id, field, value) {
+      const link = appData.linkbotoes.find(l => l.id === id);
+      if (link) {
+        link[field] = value;
+        saveData();
+      }
+    }
+
+    async function resetData() {
+      if (confirm("Tem certeza que deseja limpar todos os dados do sistema?")) {
+        appData = JSON.parse(JSON.stringify(emptyData));
+        await saveData();
+        populateFormInputs();
+      }
+    }
+
+    function copyShareUrl() {
+      navigator.clipboard.writeText(window.location.href);
+      alert("Link copiado para a área de transferência!");
+    }
+
+    function populateFormInputs() {
+      document.getElementById('input-avatar').value = appData.linkperfil.avatar || "";
+      document.getElementById('input-name').value = appData.linkperfil.name || "";
+      document.getElementById('input-desc').value = appData.linkperfil.desc || "";
+      document.getElementById('input-bg-url').value = appData.linkperfil.customBg || "";
+
+      document.getElementById('input-header-title').value = appData.linkbrand.title || "Foto Evento";
+      document.getElementById('input-logo-url').value = appData.linkbrand.logo || "";
+      document.getElementById('input-footer-text').value = appData.linkfooter.text || "";
+      document.getElementById('toggle-footer-visible').checked = appData.linkfooter.visible !== false;
+
+      document.getElementById('select-font-name').value = appData.linkstyle.fontName || "font-inter";
+      document.getElementById('color-name').value = appData.linkstyle.colorName || "#ffffff";
+      document.getElementById('color-name-hex').value = appData.linkstyle.colorName || "#ffffff";
+
+      document.getElementById('select-font-desc').value = appData.linkstyle.fontDesc || "font-inter";
+      document.getElementById('color-desc').value = appData.linkstyle.colorDesc || "#e2e8f0";
+      document.getElementById('color-desc-hex').value = appData.linkstyle.colorDesc || "#e2e8f0";
+
+      document.getElementById('select-font-link').value = appData.linkstyle.fontLink || "font-inter";
+      document.getElementById('color-link').value = appData.linkstyle.colorLink || "#ffffff";
+      document.getElementById('color-link-hex').value = appData.linkstyle.colorLink || "#ffffff";
+    }
+
+    function renderApp() {
+      const headerTitle = document.getElementById('header-title');
+      const headerLogoImg = document.getElementById('header-logo-img');
+      const headerLogoIcon = document.getElementById('header-logo-icon');
+
+      if (headerTitle) headerTitle.textContent = appData.linkbrand.title || "Foto Evento";
+      if (headerLogoImg && headerLogoIcon) {
+        if (appData.linkbrand.logo) {
+          headerLogoImg.src = appData.linkbrand.logo;
+          headerLogoImg.classList.remove('hidden');
+          headerLogoIcon.classList.add('hidden');
+        } else {
+          headerLogoImg.classList.add('hidden');
+          headerLogoIcon.classList.remove('hidden');
+        }
+      }
+
+      const containers = [
+        { main: document.getElementById('bio-container'), overlay: document.getElementById('bg-overlay') },
+        { main: document.getElementById('preview-container'), overlay: document.getElementById('preview-bg-overlay') }
+      ];
+
+      const themes = {
+        modern: { bg: 'bg-slate-900', text: 'text-white', cardBtn: 'bg-slate-800/80 hover:bg-slate-700 text-white border border-slate-700' },
+        neon: { bg: 'bg-purple-950', text: 'text-white', cardBtn: 'bg-pink-950/60 hover:bg-pink-900/80 text-pink-100 border border-pink-500/40 shadow-[0_0_15px_rgba(236,72,153,0.15)]' },
+        dark: { bg: 'bg-black', text: 'text-gray-100', cardBtn: 'bg-gray-900 hover:bg-gray-800 text-gray-100 border border-gray-800' },
+        light: { bg: 'bg-gray-100', text: 'text-gray-900', cardBtn: 'bg-white hover:bg-gray-50 text-gray-800 border border-gray-200 shadow-sm' },
+        glass: { bg: 'bg-cyan-950', text: 'text-cyan-50', cardBtn: 'glass-card hover:bg-white/30 text-white' },
+        pastel: { bg: 'bg-amber-950', text: 'text-amber-50', cardBtn: 'bg-amber-900/60 hover:bg-amber-900/90 text-amber-100 border border-amber-700/50' }
+      };
+
+      const currentTheme = themes[appData.linkstyle.theme] || themes.modern;
+
+      containers.forEach(c => {
+        if (!c.main || !c.overlay) return;
+        c.main.className = c.main.className.replace(/bg-\S+/g, '');
+        c.main.classList.add(currentTheme.bg);
+
+        if (appData.linkperfil.customBg) {
+          c.overlay.style.backgroundImage = `url('${appData.linkperfil.customBg}')`;
+          c.overlay.classList.remove('hidden');
+        } else {
+          c.overlay.style.backgroundImage = 'none';
+          c.overlay.classList.add('hidden');
+        }
+      });
+
+      const profileTargets = [
+        { avatar: 'bio-avatar', placeholder: 'bio-avatar-placeholder', name: 'bio-name', desc: 'bio-desc', socials: 'bio-socials', links: 'bio-links', footer: 'bio-footer', footerText: 'bio-footer-text', isPreview: false },
+        { avatar: 'preview-avatar', placeholder: 'preview-avatar-placeholder', name: 'preview-name', desc: 'preview-desc', socials: 'preview-socials', links: 'preview-links', footer: 'preview-footer', footerText: 'preview-footer-text', isPreview: true }
+      ];
+
+      profileTargets.forEach(target => {
+        const avatarImg = document.getElementById(target.avatar);
+        const avatarPlaceholder = document.getElementById(target.placeholder);
+
+        if (avatarImg && avatarPlaceholder) {
+          if (appData.linkperfil.avatar) {
+            avatarImg.src = appData.linkperfil.avatar;
+            avatarImg.classList.remove('hidden');
+            avatarPlaceholder.classList.add('hidden');
+          } else {
+            avatarImg.classList.add('hidden');
+            avatarPlaceholder.classList.remove('hidden');
+          }
+        }
+        
+        const elName = document.getElementById(target.name);
+        if (elName) {
+          elName.textContent = appData.linkperfil.name || "Seu Nome";
+          elName.className = elName.className.replace(/font-\S+/g, '');
+          elName.classList.add(appData.linkstyle.fontName || 'font-inter');
+          elName.style.color = appData.linkstyle.colorName || '#ffffff';
+        }
+
+        const elDesc = document.getElementById(target.desc);
+        if (elDesc) {
+          elDesc.textContent = appData.linkperfil.desc || "";
+          elDesc.className = elDesc.className.replace(/font-\S+/g, '');
+          elDesc.classList.add(appData.linkstyle.fontDesc || 'font-inter');
+          elDesc.style.color = appData.linkstyle.colorDesc || '#e2e8f0';
+        }
+
+        const elFooter = document.getElementById(target.footer);
+        const elFooterText = document.getElementById(target.footerText);
+        if (elFooter && elFooterText) {
+          elFooterText.textContent = appData.linkfooter.text || "";
+          if (appData.linkfooter.visible === false) {
+            elFooter.classList.add('hidden');
+          } else {
+            elFooter.classList.remove('hidden');
+          }
+        }
+
+        // REDES SOCIAIS
+        const elSocials = document.getElementById(target.socials);
+        if (elSocials) {
+          elSocials.innerHTML = '';
+          appData.linksocials.forEach(s => {
+            if (!s.active) return;
+            const a = document.createElement('a');
+            a.href = s.url || "#";
+            a.target = "_blank";
+            a.title = s.name || "Rede Social";
+            a.className = `w-9 h-9 sm:w-10 sm:h-10 rounded-full bg-gray-900/80 border border-gray-700/60 hover:bg-gray-800 flex items-center justify-center text-base sm:text-lg text-white transition transform hover:scale-110 shadow-md`;
+            
+            const iconVal = s.icon || 'fa-solid fa-globe';
+            if (iconVal.trim().startsWith('<')) {
+              a.innerHTML = iconVal;
+            } else if (iconVal.startsWith('http') || iconVal.startsWith('data:image')) {
+              a.innerHTML = `<img src="${iconVal}" class="w-4 h-4 sm:w-5 sm:h-5 object-contain">`;
+            } else {
+              a.innerHTML = `<i class="${iconVal}"></i>`;
+            }
+            elSocials.appendChild(a);
+          });
+        }
+
+        // LINKS
+        const elLinks = document.getElementById(target.links);
+        if (elLinks) {
+          elLinks.innerHTML = '';
+          appData.linkbotoes.forEach(l => {
+            if (!l.active) return;
+            
+            const linkBtn = document.createElement('button');
+            const sizeClasses = target.isPreview ? 'py-2 px-3 text-xs' : 'py-3.5 px-4 sm:px-5 text-sm md:text-base';
+            const fontClass = appData.linkstyle.fontLink || 'font-inter';
+            
+            linkBtn.className = `w-full rounded-2xl ${sizeClasses} font-semibold transition-all duration-200 flex items-center justify-between group shadow-md hover:shadow-lg hover:-translate-y-0.5 ${currentTheme.cardBtn} ${fontClass}`;
+            linkBtn.style.color = appData.linkstyle.colorLink || '#ffffff';
+            
+            if (!target.isPreview) {
+              linkBtn.onclick = () => registerClick(l.id, l.url);
+            }
+
+            let iconMarkup = '';
+            const iconVal = l.icon || 'fa-solid fa-link';
+            if (iconVal.trim().startsWith('<')) {
+              iconMarkup = iconVal;
+            } else if (iconVal.startsWith('http://') || iconVal.startsWith('https://') || iconVal.startsWith('data:image')) {
+              iconMarkup = `<img src="${iconVal}" alt="Icon" class="w-5 h-5 sm:w-6 sm:h-6 object-contain group-hover:scale-110 transition">`;
+            } else {
+              iconMarkup = `<i class="${iconVal}"></i>`;
+            }
+
+            linkBtn.innerHTML = `
+              <span class="w-5 sm:w-6 text-left opacity-90 group-hover:scale-110 transition flex items-center justify-center">${iconMarkup}</span>
+              <span class="flex-grow text-center px-2 truncate">${l.title}</span>
+              <span class="w-5 sm:w-6 text-right text-xs opacity-40 group-hover:opacity-100 transition"><i class="fa-solid fa-chevron-right"></i></span>
+            `;
+            elLinks.appendChild(linkBtn);
+          });
+        }
+      });
+
+      // PAINEL ADMIN - REDES SOCIAIS
+      const adminSocialsList = document.getElementById('admin-socials-list');
+      if (adminSocialsList) {
+        adminSocialsList.innerHTML = '';
+        appData.linksocials.forEach((s, index) => {
+          const item = document.createElement('div');
+          item.className = `p-3.5 rounded-xl border ${s.active ? 'bg-gray-800/80 border-gray-700' : 'bg-gray-900/40 border-gray-800 opacity-60'} transition space-y-3`;
+          item.innerHTML = `
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center space-x-2 flex-grow">
+                <span class="text-xs text-gray-500 font-mono">#${index + 1}</span>
+                <input type="text" value="${s.name}" oninput="updateSocialData(${s.id}, 'name', this.value)" placeholder="Nome" class="bg-gray-900 border border-gray-700 rounded px-2.5 py-1 text-xs text-white font-medium flex-grow outline-none focus:border-indigo-500">
+              </div>
+              <div class="flex items-center space-x-1">
+                <button onclick="toggleSocial(${s.id})" class="px-2 py-1 text-xs rounded ${s.active ? 'bg-emerald-900/40 text-emerald-300' : 'bg-gray-700 text-gray-400'}" title="Mostrar/Ocultar">
+                  <i class="fa-solid ${s.active ? 'fa-eye' : 'fa-eye-slash'}"></i>
+                </button>
+                <button onclick="removeSocial(${s.id})" class="bg-red-900/50 hover:bg-red-800 text-red-200 px-2 py-1 rounded text-xs transition flex items-center space-x-1" title="Excluir">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </div>
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-2">
+              <div class="sm:col-span-7">
+                <input type="text" value="${s.url}" oninput="updateSocialData(${s.id}, 'url', this.value)" placeholder="URL" class="w-full bg-gray-900 border border-gray-700 rounded px-2.5 py-1 text-xs text-gray-300 outline-none focus:border-indigo-500">
+              </div>
+              <div class="sm:col-span-5">
+                <input type="text" value="${s.icon}" oninput="updateSocialData(${s.id}, 'icon', this.value)" placeholder="Ícone (fa-brands...)" class="w-full bg-gray-900 border border-gray-700 rounded px-2.5 py-1 text-xs text-gray-300 outline-none focus:border-indigo-500">
+              </div>
+            </div>
+          `;
+          adminSocialsList.appendChild(item);
+        });
+      }
+
+      // PAINEL ADMIN - LINKS
+      const adminLinksList = document.getElementById('admin-links-list');
+      if (adminLinksList) {
+        adminLinksList.innerHTML = '';
+        appData.linkbotoes.forEach((l, index) => {
+          const item = document.createElement('div');
+          item.className = `p-3.5 rounded-xl border ${l.active ? 'bg-gray-800/80 border-gray-700' : 'bg-gray-900/40 border-gray-800 opacity-60'} transition space-y-3`;
+          
+          item.innerHTML = `
+            <div class="flex items-center justify-between gap-2">
+              <div class="flex items-center space-x-2 flex-grow">
+                <span class="text-xs text-gray-500 font-mono">#${index + 1}</span>
+                <input type="text" value="${l.title}" oninput="updateLinkData(${l.id}, 'title', this.value)" class="bg-gray-900 border border-gray-700 rounded px-2.5 py-1 text-xs text-white font-medium flex-grow outline-none focus:border-indigo-500">
+              </div>
+
+              <div class="flex items-center space-x-1">
+                <button onclick="moveLink(${l.id}, 'up')" ${index === 0 ? 'disabled class="opacity-20 text-gray-500 px-1 py-1"' : 'class="text-gray-400 hover:text-white px-1 py-1 text-xs"'}>
+                  <i class="fa-solid fa-arrow-up"></i>
+                </button>
+                <button onclick="moveLink(${l.id}, 'down')" ${index === appData.linkbotoes.length - 1 ? 'disabled class="opacity-20 text-gray-500 px-1 py-1"' : 'class="text-gray-400 hover:text-white px-1 py-1 text-xs"'}>
+                  <i class="fa-solid fa-arrow-down"></i>
+                </button>
+                <button onclick="toggleLink(${l.id})" class="px-2 py-1 text-xs rounded ${l.active ? 'bg-emerald-900/40 text-emerald-300' : 'bg-gray-700 text-gray-400'}">
+                  <i class="fa-solid ${l.active ? 'fa-eye' : 'fa-eye-slash'}"></i>
+                </button>
+                <button onclick="removeLink(${l.id})" class="text-red-400 hover:text-red-300 px-1 py-1 text-xs">
+                  <i class="fa-solid fa-trash"></i>
+                </button>
+              </div>
+            </div>
+
+            <div class="grid grid-cols-1 sm:grid-cols-12 gap-2">
+              <div class="sm:col-span-7">
+                <input type="text" value="${l.url}" oninput="updateLinkData(${l.id}, 'url', this.value)" placeholder="URL de destino" class="w-full bg-gray-900 border border-gray-700 rounded px-2.5 py-1 text-xs text-gray-300 outline-none focus:border-indigo-500">
+              </div>
+              <div class="sm:col-span-5">
+                <input type="text" value="${l.icon}" oninput="updateLinkData(${l.id}, 'icon', this.value)" placeholder="Ícone (fa-solid...)" class="w-full bg-gray-900 border border-gray-700 rounded px-2.5 py-1 text-xs text-gray-300 outline-none focus:border-indigo-500">
+              </div>
+            </div>
+          `;
+          adminLinksList.appendChild(item);
+        });
+      }
+
+      const statsList = document.getElementById('stats-list');
+      if (statsList) {
+        statsList.innerHTML = '';
+        const totalClicks = appData.linkbotoes.reduce((acc, l) => acc + (l.clicks || 0), 0);
+
+        appData.linkbotoes.forEach(l => {
+          const percent = totalClicks > 0 ? Math.round(((l.clicks || 0) / totalClicks) * 100) : 0;
+          const statItem = document.createElement('div');
+          statItem.className = "bg-gray-900/60 p-3 rounded-xl border border-gray-700/60 space-y-1.5";
+          
+          statItem.innerHTML = `
+            <div class="flex justify-between items-center text-xs">
+              <span class="font-medium text-gray-200 flex items-center">
+                <i class="fa-solid fa-link mr-2 text-indigo-400"></i> ${l.title}
+              </span>
+              <span class="font-semibold text-indigo-300">${l.clicks || 0} cliques (${percent}%)</span>
+            </div>
+            <div class="w-full bg-gray-800 rounded-full h-2 overflow-hidden">
+              <div class="bg-indigo-500 h-2 rounded-full transition-all duration-500" style="width: ${percent}%"></div>
+            </div>
+          `;
+          statsList.appendChild(statItem);
+        });
+      }
+    }
+
+    window.addEventListener('DOMContentLoaded', () => {
+      loadFromSupabase();
+    });
+  </script>
+</body>
+</html>
